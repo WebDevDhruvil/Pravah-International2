@@ -10,7 +10,7 @@
   // ==========================================
   const PRAVAH_WHATSAPP_NUMBER = "919106187102";
   const EMAILJS_PUBLIC_KEY = "GRgibRhB91SlY58kb";
-  const EMAILJS_SERVICE_ID = "service_ryhonfl"; // <-- Apne EmailJS dashboard ka exact Service ID yahan check karein
+  const EMAILJS_SERVICE_ID = "service_7pmz83g"; // <-- Apne EmailJS dashboard ka exact Service ID yahan check karein
   const EMAILJS_TEMPLATE_ID = "template_wy293so";
 
   if (window.emailjs) {
