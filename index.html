@@ -6,9 +6,10 @@
   <meta name="theme-color" content="#ffffff">
   <meta name="description" content="Pravah International engineers deterministic intake systems for luxury mobility operators. Founded by Dhruvil Prajapati.">
   <meta name="referrer" content="strict-origin-when-cross-origin">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; form-action 'self' https://wa.me; object-src 'none'; frame-ancestors 'none'; img-src 'self' data:; font-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self' https://wa.me; upgrade-insecure-requests">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; form-action 'self' https://wa.me; object-src 'none'; frame-ancestors 'none'; img-src 'self' data:; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' https://cdn.jsdelivr.net; connect-src 'self' https://wa.me https://api.emailjs.com; upgrade-insecure-requests">
   <title>Pravah International | Deterministic Intake Architecture</title>
   <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" defer></script>
   <script src="app.js" defer></script>
 </head>
 <body>
@@ -102,8 +103,8 @@
         <p class="micro-note">Operational outcomes depend on integrations, fleet policies, payment-provider capabilities and the operator's approval rules.</p>
       </div>
     </section>
-    
-        <section class="services-pricing-section section-pad" id="services-pricing">
+
+    <section class="services-pricing-section section-pad" id="services-pricing">
       <div class="container">
         <div class="section-heading reveal">
           <div>
@@ -117,10 +118,11 @@
           <span class="small-label">SELECT OPERATING CURRENCY</span>
           <div class="currency-tabs pricing-currency-tabs" role="group" aria-label="Choose pricing currency">
             <button type="button" class="currency-tab pricing-tab active" data-pcurr="AED" aria-pressed="true">🇦🇪 AED (UAE)</button>
-<button type="button" class="currency-tab pricing-tab" data-pcurr="INR" aria-pressed="false">🇮🇳 INR (India)</button>
-<button type="button" class="currency-tab pricing-tab" data-pcurr="USD" aria-pressed="false">🇺🇸 USD (USA)</button>
-<button type="button" class="currency-tab pricing-tab" data-pcurr="GBP" aria-pressed="false">🇬🇧 GBP (UK)</button>
- </div>
+            <button type="button" class="currency-tab pricing-tab" data-pcurr="INR" aria-pressed="false">🇮🇳 INR (India)</button>
+            <button type="button" class="currency-tab pricing-tab" data-pcurr="USD" aria-pressed="false">🇺🇸 USD (USA)</button>
+            <button type="button" class="currency-tab pricing-tab" data-pcurr="GBP" aria-pressed="false">🇬🇧 GBP (UK)</button>
+          </div>
+        </div>
 
         <div class="pricing-grid">
           <article class="pricing-card reveal">
@@ -183,7 +185,7 @@
             </div>
             <p>All workflows, billing invoices, and timezone routing are configured for seamless cross-border B2B delivery.</p>
           </div>
-                    <div class="countries-grid">
+          <div class="countries-grid">
             <div class="country-card">
               <span class="country-code">🇦🇪 AE · GST (UTC+4)</span>
               <h4>United Arab Emirates</h4>
@@ -205,8 +207,9 @@
               <p>London &amp; Manchester — Chauffeur fleets, boutique consultancies &amp; automated intake.</p>
             </div>
           </div>
+        </div>
+      </div>
     </section>
-
 
     <section class="sandbox-section section-pad" id="simulator">
       <div class="container">
@@ -281,14 +284,15 @@
         </div>
       </div>
     </section>
-    
-        <section class="credentials-section section-pad" id="credentials">
+
+    <section class="credentials-section section-pad" id="credentials">
       <div class="container">
         <div class="section-heading reveal">
           <div>
             <p class="eyebrow">OFFICIAL VERIFICATION / 03.5</p>
             <h2>Registered. <em>Accountable.</em></h2>
-          </div>
+             
+                       </div>
           <p class="section-intro">Pravah International operates as a formally registered Indian enterprise under the Ministry of Micro, Small &amp; Medium Enterprises (MSME), enabling compliant cross-border B2B consultancy.</p>
         </div>
 
@@ -339,7 +343,6 @@
       </div>
     </section>
 
-
     <section class="pilot-section section-pad" id="pilot">
       <div class="container pilot-grid">
         <div class="pilot-copy reveal">
@@ -347,7 +350,7 @@
           <h2>Turn missed enquiries into <em>managed opportunities.</em></h2>
           <p>Share a few operational details. Pravah International will scope a custom 14-day pilot around your fleet size, operating hub, and after-hours enquiry flow.</p>
           <div class="pilot-points"><span><b>01</b> Workflow discovery</span><span><b>02</b> Intake architecture</span><span><b>03</b> Controlled pilot review</span></div>
-          <p class="pilot-note">Direct Executive Dispatch: Submitting this form formats your fleet brief and connects directly to Pravah International's WhatsApp desk.</p>
+          <p class="pilot-note">Dual-Channel Executive Dispatch: Submitting this form logs your brief directly to our executive Gmail desk and opens an encrypted WhatsApp handover.</p>
         </div>
         <div class="pilot-form-card reveal">
           <div class="form-heading"><div><span class="small-label">OPERATOR INTAKE</span><h3>Request a pilot</h3></div><span class="form-reference">PI / PILOT</span></div>
@@ -355,19 +358,20 @@
             <div class="form-grid">
               <div class="field"><label for="operatorName">Operator name</label><input id="operatorName" name="operatorName" type="text" maxlength="80" autocomplete="name" required placeholder="Your full name"></div>
               <div class="field"><label for="companyName">Fleet / company name</label><input id="companyName" name="companyName" type="text" maxlength="100" autocomplete="organization" required placeholder="Company name"></div>
-              <div class="field"><label for="fleetSize">Fleet size</label><select id="fleetSize" name="fleetSize" required><option value="">Select fleet size</option><option value="1–10 vehicles">1–10 vehicles</option><option value="11–30 vehicles">11–30 vehicles</option><option value="31–75 vehicles">31–75 vehicles</option><option value="76–150 vehicles">76–150 vehicles</option><option value="150+ vehicles">150+ vehicles</option></select></div>
+              <div class="field"><label for="workEmail">Work email</label><input id="workEmail" name="workEmail" type="email" maxlength="100" autocomplete="email" required placeholder="founder@company.com"></div>
               <div class="field"><label for="whatsapp">WhatsApp number</label><input id="whatsapp" name="whatsapp" type="tel" inputmode="tel" autocomplete="tel" maxlength="24" required placeholder="+971 50 000 0000"></div>
-              <div class="field field-full"><label for="hub">Operating hub</label><select id="hub" name="hub" required><option value="">Choose primary hub</option><option>Dubai</option><option>London</option><option>Miami</option><option>Other</option></select></div>
+              <div class="field"><label for="fleetSize">Fleet size</label><select id="fleetSize" name="fleetSize" required><option value="">Select fleet size</option><option value="1–10 vehicles">1–10 vehicles</option><option value="11–30 vehicles">11–30 vehicles</option><option value="31–75 vehicles">31–75 vehicles</option><option value="76–150 vehicles">76–150 vehicles</option><option value="150+ vehicles">150+ vehicles</option></select></div>
+              <div class="field"><label for="hub">Operating hub</label><select id="hub" name="hub" required><option value="">Choose primary hub</option><option>Dubai</option><option>London</option><option>Miami</option><option>Other</option></select></div>
             </div>
             <div class="honeypot" aria-hidden="true"><label for="website">Leave this field empty</label><input id="website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
-            <label class="consent-check"><input id="privacyConsent" type="checkbox" required><span>I agree that Pravah International may contact me on WhatsApp regarding this 14-day fleet pilot enquiry. <a href="legal.html#privacy">Privacy terms</a>.</span></label>
+            <label class="consent-check"><input id="privacyConsent" type="checkbox" required><span>I agree that Pravah International may process my details and contact me via WhatsApp and email regarding this pilot enquiry. <a href="legal.html#privacy">Privacy Policy</a>.</span></label>
             <p class="form-error" id="formError" role="alert" aria-live="polite"></p>
-            <button class="button button-gold form-submit" type="submit">Send Pilot Brief via WhatsApp <span aria-hidden="true">↗</span></button>
-            <p class="form-privacy">DIRECT WHATSAPP DISPATCH · ENCRYPTED END-TO-END</p>
+            <button class="button button-gold form-submit" id="submitBtn" type="submit">Send Pilot Brief (WhatsApp + Email) <span aria-hidden="true">↗</span></button>
+            <p class="form-privacy">DUAL-CHANNEL DISPATCH · GMAIL BACKUP + WHATSAPP DIRECT</p>
           </form>
           <div class="receipt" id="receipt" hidden aria-live="polite">
-            <div class="receipt-icon">✓</div><p class="eyebrow">WHATSAPP DISPATCH READY</p><h3>Pilot Brief<br>Forwarded to WhatsApp</h3>
-            <p class="receipt-copy">Your fleet specifications have been formatted and opened in WhatsApp. If WhatsApp did not open automatically, click the button below.</p>
+            <div class="receipt-icon">✓</div><p class="eyebrow">DISPATCH CONFIRMED</p><h3>Pilot Brief<br>Logged &amp; Forwarded</h3>
+            <p class="receipt-copy" id="receiptStatusMsg">Your brief has been logged to Pravah International's executive email desk and formatted for WhatsApp handover.</p>
             <dl id="receiptDetails"></dl>
             <div class="receipt-code" id="receiptCode"></div>
             <a class="button button-gold receipt-reset" id="reopenWhatsApp" href="#" target="_blank" rel="noopener noreferrer">Open WhatsApp Chat ↗</a>
@@ -386,13 +390,18 @@
     <div class="container footer-main">
       <a class="brand footer-brand" href="#top"><span class="monogram">PI</span><span class="brand-name">PRAVAH <span>INTERNATIONAL</span></span></a>
       <p>Deterministic intake architecture for global mobility fleets.<br><span style="color:#c6aa5b; font-size:9px; letter-spacing:1px;">GOVT. OF INDIA (MSME) REGISTERED · UDYAM-GJ-09-0083925 · NIC 62020</span></p>
-      <nav class="footer-links" aria-label="Footer navigation"><a href="#architecture">Architecture</a><a href="#simulator">Live Sandbox</a><a href="#leadership">Founder</a><a href="legal.html">Privacy &amp; Legal</a></nav>
+      <nav class="footer-links" aria-label="Footer navigation">
+        <a href="legal.html#privacy">Privacy Policy</a>
+        <a href="legal.html#terms">Terms of Service</a>
+        <a href="legal.html#security">Security</a>
+        <a href="legal.html#cross-border">Cross-Border B2B</a>
+      </nav>
     </div>
     <div class="container footer-bottom"><span>© <span id="currentYear">2026</span> PRAVAH INTERNATIONAL. ALL RIGHTS RESERVED.</span><span>MSME REG: UDYAM-GJ-09-0083925 · GUJARAT, INDIA</span><a href="#top">BACK TO TOP ↑</a></div>
   </footer>
 
   <aside class="cookie-banner" id="cookieBanner" aria-label="Cookie preferences" hidden>
-    <div><strong>Privacy preferences</strong><p>We use essential local storage to remember this choice. Optional analytics are not enabled. Read our <a href="legal.html#privacy">Privacy Policy</a>.</p></div>
+    <div><strong>Cookie &amp; Storage Preferences</strong><p>We use essential browser storage to save your preference. Optional analytics remain disabled unless you click Accept. Read our <a href="legal.html#privacy">Privacy Policy</a>.</p></div>
     <div class="cookie-actions"><button type="button" class="button button-outline cookie-button" id="essentialCookies">Essential Only</button><button type="button" class="button button-gold cookie-button" id="acceptCookies">Accept</button></div>
   </aside>
 </body>

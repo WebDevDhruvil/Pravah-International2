@@ -5,6 +5,18 @@
   const safeText = (value, maxLength = 120) => String(value ?? "").replace(/[<>]/g, "").replace(/[\u0000-\u001F\u007F]/g, "").trim().slice(0, maxLength);
   const reducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  // ==========================================
+  // PRAVAH INTERNATIONAL DISPATCH CONFIG
+  // ==========================================
+  const PRAVAH_WHATSAPP_NUMBER = "919106187102";
+  const EMAILJS_PUBLIC_KEY = "GRgibRhB91SlY58kb";
+  const EMAILJS_SERVICE_ID = "service_ryhonfl"; // <-- Apne EmailJS dashboard ka exact Service ID yahan check karein
+  const EMAILJS_TEMPLATE_ID = "template_wy293so";
+
+  if (window.emailjs) {
+    window.emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+  }
+
   // Mobile navigation
   const menuToggle = byId("menuToggle");
   const primaryNav = byId("primaryNav");
@@ -161,164 +173,6 @@
     });
   }
 
-  // Multi-currency illustrative calculator
-  const fxRates = { AED: 1, USD: 0.2723, EUR: 0.2514, GBP: 0.2158 };
-  const currencySymbols = { AED: "AED", USD: "USD", EUR: "EUR", GBP: "GBP" };
-  let selectedCurrency = "AED";
-  const depositAmount = byId("depositAmount");
-  const convertedAmount = byId("convertedAmount");
-  const rateNote = byId("rateNote");
-  const currencyTabs = document.querySelectorAll(".currency-tab");
-
-  function updateCurrency() {
-    if (!depositAmount || !convertedAmount || !rateNote) return;
-    const raw = Number(depositAmount.value);
-    const amount = Number.isFinite(raw) && raw > 0 ? Math.min(raw, 1000000) : 0;
-    const converted = amount * fxRates[selectedCurrency];
-    convertedAmount.textContent = `${currencySymbols[selectedCurrency]} ${converted.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-    rateNote.textContent = `1 AED = ${fxRates[selectedCurrency].toFixed(4)} ${selectedCurrency} · illustrative rate`;
-  }
-  currencyTabs.forEach((tab) => {
-    tab.addEventListener("click", () => {
-      selectedCurrency = tab.dataset.currency;
-      currencyTabs.forEach((item) => {
-        const active = item === tab;
-        item.classList.toggle("active", active);
-        item.setAttribute("aria-pressed", String(active));
-      });
-      updateCurrency();
-    });
-  });
-  if (depositAmount) depositAmount.addEventListener("input", updateCurrency);
-  updateCurrency();
-
-  // Pilot form: Direct WhatsApp Lead Dispatch + Confirmation Receipt
-  const pilotForm = byId("pilotForm");
-  const formError = byId("formError");
-  const receipt = byId("receipt");
-  const receiptDetails = byId("receiptDetails");
-  const receiptCode = byId("receiptCode");
-  const reopenWhatsApp = byId("reopenWhatsApp");
-  const newSubmission = byId("newSubmission");
-
-  // APNA WHATSAPP NUMBER YAHAN DAALO (Bina '+' ke, country code ke saath, jaise 919876543210)
-  const PRAVAH_WHATSAPP_NUMBER = "919106187102";
-
-  function showFormError(message) {
-    if (formError) formError.textContent = message;
-  }
-
-  function validPhone(value) {
-    const digits = value.replace(/\D/g, "");
-    return digits.length >= 8 && digits.length <= 15;
-  }
-
-  function addReceiptRow(label, value) {
-    const row = document.createElement("div");
-    const term = document.createElement("dt");
-    const detail = document.createElement("dd");
-    term.textContent = label;
-    detail.textContent = value;
-    row.append(term, detail);
-    receiptDetails.appendChild(row);
-  }
-
-  if (pilotForm) {
-    pilotForm.addEventListener("submit", (event) => {
-      event.preventDefault();
-      showFormError("");
-      const honeypot = byId("website");
-      if (honeypot && honeypot.value.trim() !== "") {
-        showFormError("Unable to process this request.");
-        return;
-      }
-
-      const operator = safeText(byId("operatorName")?.value, 80);
-      const company = safeText(byId("companyName")?.value, 100);
-      const fleet = safeText(byId("fleetSize")?.value, 30);
-      const phone = safeText(byId("whatsapp")?.value, 24);
-      const hub = safeText(byId("hub")?.value, 30);
-      const consent = byId("privacyConsent")?.checked;
-
-      if (operator.length < 2 || company.length < 2 || !fleet || !hub || !validPhone(phone)) {
-        showFormError("Please complete every field and enter a valid international WhatsApp number.");
-        return;
-      }
-      if (!consent) {
-        showFormError("Please confirm the privacy notice before continuing.");
-        return;
-      }
-
-      const dateCode = new Date().toISOString().replace(/[-:.TZ]/g, "").slice(0, 14);
-      const randomCode = Math.random().toString(36).slice(2, 7).toUpperCase();
-      const refId = `PI-${dateCode}-${randomCode}`;
-
-      if (receiptDetails) {
-        receiptDetails.replaceChildren();
-        addReceiptRow("Operator", operator);
-        addReceiptRow("Company", company);
-        addReceiptRow("Fleet size", fleet);
-        addReceiptRow("WhatsApp", phone);
-        addReceiptRow("Operating hub", hub);
-      }
-      if (receiptCode) receiptCode.textContent = `DISPATCH REF: ${refId}`;
-
-      const waMessage =
-        `🚀 *14-Day Fleet Pilot Request — PRAVAH INTERNATIONAL*\n\n` +
-        `• *Reference:* ${refId}\n` +
-        `• *Operator:* ${operator}\n` +
-        `• *Fleet / Company:* ${company}\n` +
-        `• *Fleet Size:* ${fleet}\n` +
-        `• *Client WhatsApp:* ${phone}\n` +
-        `• *Operating Hub:* ${hub}\n\n` +
-        `Please share the 14-day pilot onboarding details.`;
-
-      const waUrl = `https://wa.me/${PRAVAH_WHATSAPP_NUMBER}?text=${encodeURIComponent(waMessage)}`;
-
-      if (reopenWhatsApp) reopenWhatsApp.href = waUrl;
-      pilotForm.hidden = true;
-      if (receipt) receipt.hidden = false;
-
-      window.open(waUrl, "_blank", "noopener,noreferrer");
-    });
-  }
-
-  if (newSubmission) {
-    newSubmission.addEventListener("click", () => {
-      if (pilotForm) {
-        pilotForm.reset();
-        pilotForm.hidden = false;
-      }
-      if (receipt) receipt.hidden = true;
-      showFormError("");
-      byId("operatorName")?.focus();
-    });
-  }
-
-  // Cookie banner
-  const cookieBanner = byId("cookieBanner");
-  const acceptCookies = byId("acceptCookies");
-  const essentialCookies = byId("essentialCookies");
-  const consentKey = "pravah-cookie-choice-v1";
-
-  function hideCookieBanner(choice) {
-    try {
-      window.localStorage.setItem(consentKey, choice);
-      if (cookieBanner) cookieBanner.hidden = true;
-    } catch (_error) {
-      if (cookieBanner) cookieBanner.hidden = true;
-    }
-  }
-  let savedChoice = null;
-  try { savedChoice = window.localStorage.getItem(consentKey); } catch (_error) { savedChoice = null; }
-  if (cookieBanner && !savedChoice) cookieBanner.hidden = false;
-  if (acceptCookies) acceptCookies.addEventListener("click", () => hideCookieBanner("accepted"));
-  if (essentialCookies) essentialCookies.addEventListener("click", () => hideCookieBanner("essential-only"));
-
-  const currentYear = byId("currentYear");
-  if (currentYear) currentYear.textContent = String(new Date().getFullYear());
-})();
-
   // Services & Pricing Multi-Currency Switcher (AED, INR, USD, GBP)
   const pricingTabs = document.querySelectorAll(".pricing-tab");
   const priceMains = document.querySelectorAll(".price-main");
@@ -356,3 +210,210 @@
       });
     });
   });
+
+  // Multi-currency illustrative calculator
+  const fxRates = { AED: 1, USD: 0.2723, EUR: 0.2514, GBP: 0.2158 };
+  const currencySymbols = { AED: "AED", USD: "USD", EUR: "EUR", GBP: "GBP" };
+  let selectedCurrency = "AED";
+  const depositAmount = byId("depositAmount");
+  const convertedAmount = byId("convertedAmount");
+  const rateNote = byId("rateNote");
+  const currencyTabs = document.querySelectorAll(".currency-tab:not(.pricing-tab)");
+
+  function updateCurrency() {
+    if (!depositAmount || !convertedAmount || !rateNote) return;
+    const raw = Number(depositAmount.value);
+    const amount = Number.isFinite(raw) && raw > 0 ? Math.min(raw, 1000000) : 0;
+    const converted = amount * fxRates[selectedCurrency];
+    convertedAmount.textContent = `${currencySymbols[selectedCurrency]} ${converted.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    rateNote.textContent = `1 AED = ${fxRates[selectedCurrency].toFixed(4)} ${selectedCurrency} · illustrative rate`;
+  }
+  currencyTabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      selectedCurrency = tab.dataset.currency;
+      currencyTabs.forEach((item) => {
+        const active = item === tab;
+        item.classList.toggle("active", active);
+        item.setAttribute("aria-pressed", String(active));
+      });
+      updateCurrency();
+    });
+  });
+  if (depositAmount) depositAmount.addEventListener("input", updateCurrency);
+  updateCurrency();
+
+  // Pilot form: Dual-Channel Dispatch (Gmail via EmailJS + Direct WhatsApp)
+  const pilotForm = byId("pilotForm");
+  const formError = byId("formError");
+  const submitBtn = byId("submitBtn");
+  const receipt = byId("receipt");
+  const receiptDetails = byId("receiptDetails");
+  const receiptCode = byId("receiptCode");
+  const receiptStatusMsg = byId("receiptStatusMsg");
+  const reopenWhatsApp = byId("reopenWhatsApp");
+  const newSubmission = byId("newSubmission");
+
+  function showFormError(message) {
+    if (formError) formError.textContent = message;
+  }
+
+  function validPhone(value) {
+    const digits = value.replace(/\D/g, "");
+    return digits.length >= 8 && digits.length <= 15;
+  }
+
+  function validEmail(value) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+  }
+
+  function addReceiptRow(label, value) {
+    const row = document.createElement("div");
+    const term = document.createElement("dt");
+    const detail = document.createElement("dd");
+    term.textContent = label;
+    detail.textContent = value;
+    row.append(term, detail);
+    receiptDetails.appendChild(row);
+  }
+
+  if (pilotForm) {
+    pilotForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      showFormError("");
+
+      const honeypot = byId("website");
+      if (honeypot && honeypot.value.trim() !== "") {
+        showFormError("Unable to process this request.");
+        return;
+      }
+
+      const operator = safeText(byId("operatorName")?.value, 80);
+      const company = safeText(byId("companyName")?.value, 100);
+      const email = safeText(byId("workEmail")?.value, 100);
+      const fleet = safeText(byId("fleetSize")?.value, 30);
+      const phone = safeText(byId("whatsapp")?.value, 24);
+      const hub = safeText(byId("hub")?.value, 30);
+      const consent = byId("privacyConsent")?.checked;
+
+      if (operator.length < 2 || company.length < 2 || !fleet || !hub || !validPhone(phone) || !validEmail(email)) {
+        showFormError("Please complete every field with a valid work email and international WhatsApp number.");
+        return;
+      }
+      if (!consent) {
+        showFormError("Please confirm the privacy policy before continuing.");
+        return;
+      }
+
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Dispatching to Gmail & WhatsApp…";
+      }
+
+      const dateCode = new Date().toISOString().replace(/[-:.TZ]/g, "").slice(0, 14);
+      const randomCode = Math.random().toString(36).slice(2, 7).toUpperCase();
+      const refId = `PI-${dateCode}-${randomCode}`;
+
+      // 1. CHANNEL ONE: Silent Gmail Backup via EmailJS
+      let emailSaved = false;
+      if (window.emailjs) {
+        try {
+                    await window.emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+            name: `${operator} (${company})`,
+            email: email,
+            phone: phone,
+            message: `14-Day Fleet Pilot Request (${refId}) | Company: ${company} | Fleet Size: ${fleet} | Hub: ${hub} | WhatsApp: ${phone} | Email: ${email}`
+          });
+          emailSaved = true;
+        } catch (err) {
+          console.warn("EmailJS backup fallback triggered:", err);
+        }
+      }
+
+      // 2. CHANNEL TWO: Direct WhatsApp Handover
+      const waMessage =
+        `🚀 *14-Day Fleet Pilot Request — PRAVAH INTERNATIONAL*\n\n` +
+        `• *Reference:* ${refId}\n` +
+        `• *Operator:* ${operator}\n` +
+        `• *Fleet / Company:* ${company}\n` +
+        `• *Work Email:* ${email}\n` +
+        `• *Fleet Size:* ${fleet}\n` +
+        `• *Client WhatsApp:* ${phone}\n` +
+        `• *Operating Hub:* ${hub}\n\n` +
+        `Please share the 14-day pilot onboarding details.`;
+
+      const waUrl = `https://wa.me/${PRAVAH_WHATSAPP_NUMBER}?text=${encodeURIComponent(waMessage)}`;
+
+      if (receiptDetails) {
+        receiptDetails.replaceChildren();
+        addReceiptRow("Operator", operator);
+        addReceiptRow("Company", company);
+        addReceiptRow("Work email", email);
+        addReceiptRow("Fleet size", fleet);
+        addReceiptRow("WhatsApp", phone);
+        addReceiptRow("Operating hub", hub);
+        addReceiptRow("Gmail backup", emailSaved ? "Confirmed ✓" : "Queued via WhatsApp");
+      }
+      if (receiptCode) receiptCode.textContent = `DISPATCH REF: ${refId}`;
+      if (receiptStatusMsg) {
+        receiptStatusMsg.textContent = emailSaved
+          ? "Your fleet brief has been saved to Pravah International's Gmail desk and opened in WhatsApp."
+          : "Your fleet brief has been formatted and opened in WhatsApp. Click below if WhatsApp did not launch.";
+      }
+
+      if (reopenWhatsApp) reopenWhatsApp.href = waUrl;
+      pilotForm.hidden = true;
+      if (receipt) receipt.hidden = false;
+
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Send Pilot Brief (WhatsApp + Email) <span aria-hidden="true">↗</span>';
+      }
+
+      window.open(waUrl, "_blank", "noopener,noreferrer");
+    });
+  }
+
+  if (newSubmission) {
+    newSubmission.addEventListener("click", () => {
+      if (pilotForm) {
+        pilotForm.reset();
+        pilotForm.hidden = false;
+      }
+      if (receipt) receipt.hidden = true;
+      showFormError("");
+      byId("operatorName")?.focus();
+    });
+  }
+
+  // Real Cookie & Storage Consent Controller
+  const cookieBanner = byId("cookieBanner");
+  const acceptCookies = byId("acceptCookies");
+  const essentialCookies = byId("essentialCookies");
+  const consentKey = "pravah-cookie-choice-v1";
+
+  function applyCookiePreference(choice) {
+    window.PRAVAH_CONSENT = choice;
+    document.documentElement.dataset.cookieConsent = choice;
+    try {
+      window.localStorage.setItem(consentKey, choice);
+    } catch (_error) {
+      // Storage blocked in private browsing
+    }
+    if (cookieBanner) cookieBanner.hidden = true;
+  }
+
+  let savedChoice = null;
+  try { savedChoice = window.localStorage.getItem(consentKey); } catch (_error) { savedChoice = null; }
+
+  if (savedChoice === "accepted" || savedChoice === "essential-only") {
+    applyCookiePreference(savedChoice);
+  } else if (cookieBanner) {
+    cookieBanner.hidden = false;
+  }
+
+  if (acceptCookies) acceptCookies.addEventListener("click", () => applyCookiePreference("accepted"));
+  if (essentialCookies) essentialCookies.addEventListener("click", () => applyCookiePreference("essential-only"));
+
+  const currentYear = byId("currentYear");
+  if (currentYear) currentYear.textContent = String(new Date().getFullYear());
+})();
